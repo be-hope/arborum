@@ -1,0 +1,14 @@
+{
+  "study3_states.csv": {
+    "publisher": "Grid-Sentinel, state-level extract of GRID-INDIA NLDC daily PSP reports",
+    "url": "https://raw.githubusercontent.com/HalcyonVector/Grid-Sentinel/main/Dataset/study3_states.csv",
+    "retrieved": "2026-11-07",
+    "sha256": "6cc5bc54ba038baa17866befbbbf951e183e9ef2bc7a00ff01cc02ea7ce70ecd"
+  },
+  "corrected_daily_energy_met_MU.csv": {
+    "publisher": "Hunt and Bloomfield, Zenodo v1.0, DOI 10.5281/zenodo.14983362",
+    "url": "https://zenodo.org/records/14983362/files/corrected_daily_energy_met_MU.csv",
+    "retrieved": "2026-11-07",
+    "sha256": "b74c61845a35968a6bceaa9456ee682c71719081552dac6893609980a8e9fe46"
+  }
+}

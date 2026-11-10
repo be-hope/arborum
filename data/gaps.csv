@@ -1,0 +1,4 @@
+source,period,status,reason
+NLDC original PDF,2024-04-22/2024-04-28,unacquired,Operator hostname DNS resolution failed
+SRLDC daily file,2024-04-22/2024-04-28,unacquired,Operator website inaccessible through web reader
+Zenodo corrected release,2024-04-22/2024-04-28,complete,21 supplied-energy observations; no energy-shortage field

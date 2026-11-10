@@ -1,0 +1,43 @@
+{
+  "states": [
+    "Karnataka",
+    "Kerala",
+    "Tamil Nadu"
+  ],
+  "start_date": "2024-04-22",
+  "end_date": "2024-04-28",
+  "source_priority": [
+    "grid_sentinel",
+    "zenodo"
+  ],
+  "measures": [
+    "energy_supplied",
+    "shortfall",
+    "energy_required"
+  ],
+  "tolerance_mu": 0.05,
+  "state_aliases": {
+    "TamilNadu": "Tamil Nadu",
+    "Tamil Nadu": "Tamil Nadu",
+    "Karnataka": "Karnataka",
+    "Kerala": "Kerala"
+  },
+  "inputs": [
+    {
+      "path": "data/raw/nldc/study3_states.csv",
+      "source": "grid_sentinel",
+      "parser": "long_csv",
+      "revision": 1,
+      "report_date": null,
+      "url": "https://raw.githubusercontent.com/HalcyonVector/Grid-Sentinel/main/Dataset/study3_states.csv"
+    },
+    {
+      "path": "data/raw/corrected_daily_energy_met_MU.csv",
+      "source": "zenodo",
+      "parser": "wide_csv",
+      "revision": 1,
+      "report_date": "2025-03-06",
+      "url": "https://zenodo.org/records/14983362/files/corrected_daily_energy_met_MU.csv"
+    }
+  ]
+}

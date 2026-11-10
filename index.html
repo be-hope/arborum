@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Power Ledger · State electricity</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f4ef;color:#172f2b;font:16px/1.5 "Segoe UI",sans-serif}header{background:#153c36;color:#fff;padding:18px max(5vw,20px);display:flex;align-items:center;gap:12px;font-weight:650}header b{color:#c4ef81;font-size:24px}main{max-width:1180px;margin:auto;padding:40px 24px}h1{font:normal clamp(36px,5vw,64px)/1.05 Georgia,serif;letter-spacing:-2px;margin:0}h2{font:normal 26px Georgia,serif;margin:0 0 14px}p{color:#536863}label{font-size:14px;font-weight:600}select,button{font:inherit;color:inherit;border:1px solid #a7b9b0;border-radius:5px;background:white;padding:7px 10px}button{cursor:pointer}button:hover{background:#e1ecd8}.filters,.cards{display:flex;gap:18px;flex-wrap:wrap;margin:24px 0}.cards div{flex:1;min-width:165px;background:#e0eadc;padding:18px 24px;border-top:3px solid #537c63}.cards strong{display:block;font:36px Georgia,serif}.panel{background:#fff;padding:24px;border:1px solid #d6ded5;border-radius:8px;overflow:auto;margin:18px 0}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{padding:10px 9px;text-align:right;white-space:nowrap;border-bottom:1px solid #e2e6df}th{font-size:13px;color:#52695c}th:first-child,td:first-child,td:nth-child(2),th:nth-child(2){text-align:left}.barrow{display:grid;grid-template-columns:65px 1fr 85px;align-items:center;gap:12px;font-size:14px;margin:5px 0}.track{background:#edf0e9;height:10px;border-radius:3px}.bar{background:#b66a36;height:100%;border-radius:3px}dialog{color:inherit;border:1px solid #bbcbc0;border-radius:8px;max-width:min(650px,94vw);padding:26px}dialog::backdrop{background:#172f2b66}small{color:#52695c;overflow-wrap:anywhere}output{color:#98411f}
+</style><header><b aria-hidden="true">ϟ</b> Power Ledger</header><main>
+<h1>State electricity balance</h1><p>22–28 April 2024 · Daily energy in million units (MU)</p>
+<div class="filters"><label>State <select id="state"><option value="">All states</option></select></label><label>Reporting day <select id="day"><option value="">All seven days</option></select></label></div>
+<p>Two published extractions of Indian grid reports cover the same 21 state-days. Their shared upstream origin limits independent validation. Required energy is derived from supplied energy and reported shortfall.</p>
+<output id="status" role="status">Loading recordsâ€¦</output><div class="cards" id="cards"></div>
+<section class="panel"><h2>Daily reported shortfall</h2><small>Sum across the selected states · MU</small><div id="chart"></div></section>
+<section class="panel"><h2>Supplied energy compared across sources</h2>
+<small>Grid-Sentinel versus Hunt &amp; Bloomfield’s corrected Zenodo release. Differences up to 0.05 MU are within the configured rounding tolerance.</small>
+<p id="comparison-summary"></p><table><thead><tr><th>Date</th><th>State</th><th>Grid-Sentinel MU</th><th>Zenodo MU</th><th>Difference MU</th></tr></thead><tbody id="comparison"></tbody></table></section>
+<section class="panel"><h2>State-day records</h2><small>Required energy equals supplied energy plus reported shortfall. Select a row’s evidence to inspect the source values.</small>
+<table><thead><tr><th>Date</th><th>State</th><th>Required</th><th>Supplied</th><th>Shortfall</th><th>Quality</th><th>Version</th><th>Source</th></tr></thead><tbody id="body"></tbody></table></section>
+<dialog id="detail"><h2 id="title"></h2><div id="evidence"></div><form method="dialog"><button>Close</button></form></dialog></main>
+<script>
+const el=id=>document.getElementById(id), fmt=n=>n==null?'unavailable':n.toLocaleString('en-IN',{maximumFractionDigits:2});
+async function get(url){const r=await fetch(url);if(!r.ok)throw Error('Request failed ('+r.status+')');return r.json()}
+function node(tag,text){const e=document.createElement(tag);e.textContent=text;return e}
+let data=[], comparisons=[];
+function render(){
+ const rows=data.filter(r=>(!el('state').value||r.state===el('state').value)&&(!el('day').value||r.day===el('day').value));
+ el('cards').replaceChildren();for(const [title,key] of [['Required','required'],['Supplied','supplied'],['Shortfall','shortfall']]){
+ const vals=rows.map(r=>r[key]).filter(n=>n!=null),c=node('div',title+' · MU');c.append(node('strong',fmt(vals.length?vals.reduce((a,b)=>a+b,0):null)),node('small',vals.length+' / '+rows.length+' records'));el('cards').append(c)}
+ const daily=[...new Set(rows.map(r=>r.day))].map(day=>{const v=rows.filter(r=>r.day===day).map(r=>r.shortfall);return [day,v.includes(null)?null:v.reduce((a,b)=>a+b,0)]});
+ const max=Math.max(1,...daily.map(d=>d[1]||0));el('chart').replaceChildren();for(const [day,val] of daily){const row=node('div','');row.className='barrow';const track=node('div',''),bar=node('div','');track.className='track';bar.className='bar';bar.style.width=(100*(val||0)/max)+'%';track.append(bar);row.append(node('span',day.slice(5)),track,node('span',fmt(val)));el('chart').append(row)}
+ const selectedComparisons=comparisons.filter(r=>(!el('state').value||r.state===el('state').value)&&(!el('day').value||r.day===el('day').value));
+ el('comparison').replaceChildren();
+ const matched=selectedComparisons.filter(r=>r.source_a!=null&&r.source_b!=null&&Math.abs(r.difference_mu)<=0.050000001).length;
+ el('comparison-summary').textContent=matched+' / '+selectedComparisons.length+' supplied-energy comparisons within tolerance.';
+ for(const r of selectedComparisons){const tr=node('tr','');for(const value of [r.day,r.state,fmt(r.source_a),fmt(r.source_b),fmt(r.difference_mu)])tr.append(node('td',value));el('comparison').append(tr)}
+ el('body').replaceChildren();for(const r of rows){const tr=node('tr','');for(const x of [r.day,r.state,fmt(r.required),fmt(r.supplied),fmt(r.shortfall),r.status,r.version])tr.append(node('td',x));
+ const td=node('td',''),b=node('button','Evidence');b.onclick=()=>inspect(r);td.append(b);tr.append(td);el('body').append(tr)}
+}
+async function inspect(r){el('title').textContent=r.state+' · '+r.day;el('evidence').textContent='Loadingâ€¦';el('detail').showModal();
+ try{const rows=await get('/api/evidence?'+new URLSearchParams({state:r.state,day:r.day}));el('evidence').replaceChildren();
+ for(const x of rows){el('evidence').append(node('b',x.source+' · revision '+x.revision+' · line '+x.line),node('p','Supplied '+fmt(x.supplied)+' MU · Shortfall '+fmt(x.shortfall)+' MU'),node('small',x.source_file+' · SHA-256 '+x.file_sha256))}
+ const audit=await get('/api/audit?'+new URLSearchParams({state:r.state,day:r.day}));
+ el('evidence').append(node('h3','Version history'));
+ for(const entry of audit){
+ const current=JSON.parse(entry.new_json);
+ const previous=entry.old_json?JSON.parse(entry.old_json):null;
+ el('evidence').append(node('p','Version '+entry.version+' · Shortfall '+(previous?fmt(previous.shortfall)+' → ':'')+fmt(current.shortfall)+' MU · Required '+fmt(current.energy_required)+' MU'));
+ }
+ el('evidence').append(node('p','Selected supply: '+(r.supply_source||'unavailable')+'. Selected shortfall: '+(r.shortfall_source||'unavailable')+'.'))}catch(e){el('evidence').textContent=e.message}}
+async function init(){try{[data,comparisons]=await Promise.all([get('/api/power'),get('/api/comparison')]);for(const [id,key] of [['state','state'],['day','day']]){for(const v of [...new Set(data.map(r=>r[key]))].sort())el(id).add(new Option(v,v));el(id).onchange=render}el('status').textContent='';render()}catch(e){el('status').textContent=e.message}}
+init()
+</script></html>
+

@@ -1,0 +1,3 @@
+source_name,source_file,file_sha256,report_date,ingested_at,run_id,revision,source_url
+grid_sentinel,data/raw/nldc/study3_states.csv,6cc5bc54ba038baa17866befbbbf951e183e9ef2bc7a00ff01cc02ea7ce70ecd,,2026-11-07T19:09:22.193265+00:00,10f1d08a1cc9499cb28c8f90f0d485ba,1,https://raw.githubusercontent.com/HalcyonVector/Grid-Sentinel/main/Dataset/study3_states.csv
+zenodo,data/raw/corrected_daily_energy_met_MU.csv,b74c61845a35968a6bceaa9456ee682c71719081552dac6893609980a8e9fe46,2025-03-06,2026-11-07T19:09:22.193265+00:00,10f1d08a1cc9499cb28c8f90f0d485ba,1,https://zenodo.org/records/14983362/files/corrected_daily_energy_met_MU.csv

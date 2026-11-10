@@ -1,0 +1,60 @@
+{
+  "synthetic": true,
+  "baseline": {
+    "new_files": 2,
+    "gold_rows": 21,
+    "gold_checksum": "d894ce460b6fa5288f555d437fe9a70751c71e839ee6599ae317c2485585f8dc"
+  },
+  "rerun": {
+    "new_files": 0,
+    "gold_rows": 21,
+    "gold_checksum": "d894ce460b6fa5288f555d437fe9a70751c71e839ee6599ae317c2485585f8dc"
+  },
+  "revised": {
+    "new_files": 1,
+    "gold_rows": 21,
+    "gold_checksum": "797c4f325eed54d4a9f59dd6f380d0fed940e51b285e3bba79987c334fc75312"
+  },
+  "audit": [
+    {
+      "day": "2024-04-27",
+      "state": "Kerala",
+      "version": 2,
+      "run_id": "2d688077d18141f09bb82025f07510a9",
+      "old_json": "{\"day\": \"2024-04-27\", \"state\": \"Kerala\", \"energy_required\": 111.0, \"energy_supplied\": 110.05, \"shortfall\": 0.95, \"shortfall_pct\": 0.855856, \"chosen_source\": \"grid_sentinel\", \"quality_flag\": \"passed\", \"version\": 1, \"chosen_file_id\": 1, \"required_derived\": 1}",
+      "new_json": "{\"day\": \"2024-04-27\", \"state\": \"Kerala\", \"energy_required\": 110.5, \"energy_supplied\": 110.05, \"shortfall\": 0.45, \"shortfall_pct\": 0.40724, \"chosen_source\": \"grid_sentinel\", \"quality_flag\": \"passed\", \"version\": 2, \"chosen_file_id\": 3, \"required_derived\": 1}"
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "ee0854e3aa7346dba7ea4b0620d74c6a",
+      "started_at": "2026-11-10T06:02:30.570315+00:00",
+      "status": "success",
+      "error": null
+    },
+    {
+      "run_id": "b6d3dc3fdde04aa2a1d171c6199146c1",
+      "started_at": "2026-11-10T06:02:30.893135+00:00",
+      "status": "success",
+      "error": null
+    },
+    {
+      "run_id": "2d688077d18141f09bb82025f07510a9",
+      "started_at": "2026-11-10T06:02:31.425573+00:00",
+      "status": "success",
+      "error": null
+    },
+    {
+      "run_id": "87245b115705402e9799f63d7d1ed3fb",
+      "started_at": "2026-11-10T06:02:31.505254+00:00",
+      "status": "failed",
+      "error": "Unsupported parser/header: b063c5359eea8542e6526d7f617e27e9cf07e733cb345f12ac9922ca64ca18b3.csv"
+    },
+    {
+      "run_id": "d8b78f7e00b043e58c28ab00bb05561e",
+      "started_at": "2026-11-10T06:02:31.525306+00:00",
+      "status": "success",
+      "error": null
+    }
+  ]
+}
